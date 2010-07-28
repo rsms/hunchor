@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hunchor API</title>
+    <style type="text/css">
+      body {
+        background:white; color:#111; padding:0; margin:2em;
+        font-family:helvetica,sans-serif; font-size:18px; color:#999;
+        text-rendering: optimizelegibility;
+      }
+      img { border:none; }
+      a { color:#111; text-decoration:none; }
+      a:link:hover, a:active:hover { color:#006be4; }
+      a:visited:hover { color:#af00cf; }
+      p.hunchor-error {
+        padding-top:60px;
+        font-size:32px;
+        color:#f43;
+        display:none;
+      }
+    </style>
+    <script type="text/javascript" 
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="hunchor.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(function(){
+        // Helpers for this example
+        var $m = $('#message');
+        function displayMessage(message, callee) {
+          $m.fadeOut(100, function(){
+            $m.html('<p>'+message+'</p>'+
+                    '<p><strong>Handled by:</strong></p>'+
+                    '<p><pre>'+callee+'</pre></p>').fadeIn(100);
+          });
+        }
+
+        // Fixed string match (in this case the empty string)
+        hunchor.on('', function(params, path, prevPath){
+          displayMessage('Requested the "index" page', arguments.callee);
+        });
+
+        // Web framework style pattern match
+        hunchor.on('pages/:slug', function(params, path, prevPath){
+          displayMessage('Requested the "'+params.slug+'" page',
+            arguments.callee);
+        });
+
+        // Regular expressions
+        hunchor.on(
+          /^posts\/(<year>\d{4})\/(<month>\d{2})\/(<day>\d{2})\/(<slug>.+)\/*$/,
+          function(params, path, prevPath){
+          displayMessage('Requested the post "'+params.slug+
+            '" for year '+params.year+', month '+params.month+
+            ' and day '+params.day
+            , arguments.callee);
+        });
+
+        // The later a handler is registered, the later it's chance to be invoked
+        hunchor.on(/.*/, function(params, path, prevPath){
+          displayMessage(
+            'Match-all handler invoked (since no other handler matched)',
+            arguments.callee);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <p>Try these paths:</p>
+    <ul>
+      <li><a href="#">#</a></li>
+      <li><a href="#pages/about">pages/about</a></li>
+      <li><a href="#posts/2010/07/28/some-thing">posts/2010/07/28/some-thing</a></li>
+      <li><a href="#something/unknown">something/unknown</a></li>
+    </ul>
+    <h2>Output from the different handlers</h2>
+    <div id="message"></div>
+  </body>
+</html>

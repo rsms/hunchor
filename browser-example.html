@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hunchor browser</title>
+    <style type="text/css">
+      body {
+        background:white; color:#111; padding:0; margin:2em;
+        font-family:helvetica,sans-serif; font-size:18px; color:#999;
+        text-rendering: optimizelegibility;
+      }
+      img { border:none; }
+      a { color:#111; text-decoration:none; }
+      a:link:hover, a:active:hover { color:#006be4; }
+      a:visited:hover { color:#af00cf; }
+      p.hunchor-error {
+        padding-top:60px;
+        font-size:32px;
+        color:#f43;
+        display:none;
+      }
+    </style>
+    <script type="text/javascript" 
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="hunchor.js" charset="utf-8"></script>
+    <script type="text/javascript" src="showdown.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(function(){
+        $('#content').hunchorBrowser({
+          errorDisplay: $('p.hunchor-error'),
+          dirIndexSuffix: 'index.md',
+          breadcrumb: $('h2.breadcrumb'),
+          breadcrumbSeparator: " → ",
+          relativePathPrefix: 'pages/'
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h2 class="breadcrumb"><a href="#" class="root">Site title</a></h2>
+    <p class="hunchor-error">#url not found</p>
+    <div id="content">
+      <ul>
+        <li><a href="#scrup/index.md">scrup/index.md</a></li>
+        <li><a href="#qingdao-2010/">qingdao-2010/</a></li>
+        <li><a href="#index.html">index.html</a></li>
+      </ul>
+    </div>
+  </body>
+</html>
